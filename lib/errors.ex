@@ -1,0 +1,3 @@
+defmodule Errors do
+
+end
