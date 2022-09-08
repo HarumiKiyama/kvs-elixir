@@ -1,54 +1,127 @@
 defmodule Cli.Client do
-  use ExCLI.DSL,  escript: true,mix_task: :kvs-client
-  name "client_cli"
-  description "cli for kvs client usage"
-
-  option :version,
-  help: "get version"
-  aliases: [:v]
-  run context do
-
+  def main(argv) do
+    Optimus.new!(
+      name: "kvs-client",
+      description: "kvs client cli",
+      version: "1.0.0",
+      author: "harumi <lucius0720@hotmail.com>",
+      allow_unknown_args: false,
+      parse_double_dash: true,
+      options: [
+        addr: [
+          value_name: "ADDR",
+          long: "--addr",
+          help: "server address",
+          required: false,
+          parser: :string
+        ]
+      ],
+      subcommands: [
+        get: [
+          name: "get",
+          about: "get key value from server",
+          args: [
+            key: [
+              value_name: "KEY",
+              required: true,
+              parser: :string
+            ]
+          ]
+        ],
+        set: [
+          name: "set",
+          about: "set key value on server",
+          args: [
+            key: [
+              value_name: "KEY",
+              required: true,
+              parser: :string
+            ],
+            value: [
+              value_name: "VALUE",
+              required: true,
+              parser: :string
+            ]
+          ]
+        ],
+        rm: [
+          name: "rm",
+          about: "remove key on server",
+          args: [
+            key: [
+              value_name: "KEY",
+              required: true,
+              parser: :string
+            ]
+          ]
+        ]
+      ]
+    )
+    |> Optimus.parse!(argv)
+    |> IO.inspect()
   end
-
-
-  command :get do
-    description "get key value"
-    long_description "send key and get corrodinate value from server"
-    argument :key
-    option :from, help: "http address of server"
-    run context do
-
-
-    end
-
-  end
-  command :set do
-    description "get key value"
-    long_description "send key and get corrodinate value from server"
-    argument :key
-    option :from, help: "http address of server"
-    run context do
-    end
-  end
-  command :rm do
-    description "get key value"
-    long_description "send key and get corrodinate value from server"
-    argument :key
-    option :from, help: "http address of server"
-    run context do
-    end
-
-  end
-
-  end
+end
 
 defmodule Cli.Server do
-  use ExCLI.DSL, escript: true,mix_task: :server
-  name "server_cli"
-  description "cli for kvs server usage"
-
-  def start_server() do
-
+  def main(argv) do
+    Optimus.new!(
+      name: "kvs-client",
+      description: "kvs client cli",
+      version: "1.0.0",
+      author: "harumi <lucius0720@hotmail.com>",
+      allow_unknown_args: false,
+      parse_double_dash: true,
+      options: [
+        addr: [
+          value_name: "ADDR",
+          long: "--addr",
+          help: "server address",
+          required: false,
+          parser: :string
+        ]
+      ],
+      subcommands: [
+        get: [
+          name: "get",
+          about: "get key value from server",
+          args: [
+            key: [
+              value_name: "KEY",
+              required: true,
+              parser: :string
+            ]
+          ]
+        ],
+        set: [
+          name: "set",
+          about: "set key value on server",
+          args: [
+            key: [
+              value_name: "KEY",
+              required: true,
+              parser: :string
+            ],
+            value: [
+              value_name: "VALUE",
+              required: true,
+              parser: :string
+            ]
+          ]
+        ],
+        rm: [
+          name: "rm",
+          about: "remove key on server",
+          args: [
+            key: [
+              value_name: "KEY",
+              required: true,
+              parser: :string
+            ]
+          ]
+        ]
+      ]
+    )
+    |> Optimus.parse!(argv)
+    |> IO.inspect()
   end
-
 end

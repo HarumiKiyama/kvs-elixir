@@ -1,0 +1,4 @@
+%{
+  "ex_cli": {:hex, :ex_cli, "0.1.6", "30f97ef0751c75863c669cf34ebb689a5a3ebf9dafd2e73739f173fbd7561a53", [:mix], [], "hexpm", "9b6e4e89f457f6805ae47a0fc0004bae804d894c85976dfd5b47330737dccf7b"},
+  "optimus": {:hex, :optimus, "0.3.0", "72754d1a06bab7b4b7f59b05622e442e5ab7909b9db5d8b01dc3d2792559fa9e", [:mix], [], "hexpm", "d0d026fdf068e461e1173c463ea2da15e109942135aa4e2490dd2dc9ef05946c"},
+}
