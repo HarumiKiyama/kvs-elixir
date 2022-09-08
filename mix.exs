@@ -7,7 +7,7 @@ defmodule KvsElixir.MixProject do
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
-      escript: escript(),
+      escript: [main_module: Cli.Client],
       deps: deps()
     ]
   end
@@ -24,11 +24,9 @@ defmodule KvsElixir.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:optimus, "~> 0.2"}
+      {:optimus, "~> 0.2"},
+      {:jason, "~>1.3"}
     ]
   end
 
-  defp escript do
-    [main_module: Cli.Client]
-  end
 end

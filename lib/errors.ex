@@ -1,3 +1,3 @@
-defmodule Errors do
-
+defmodule Errors.IOError do
+  defexception message: "IOError"
 end
