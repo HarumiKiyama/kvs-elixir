@@ -24,3 +24,5 @@ kvs_elixir-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+kvs-client
