@@ -1,42 +1,40 @@
 defmodule KvServer do
-  defstruct [:port, file_location: "/tmp"]
   use GenServer
   require Logger
-  @impl true
-  def init(port) do
+
+  def start_link() do
+    file_path = Application.get_env(:kvserver, :file_path, "/tmp/kv.db")
+    port = Application.get_env(:kvserver, :port, 6666)
+    GenServer.start_link(__MODULE__, [file_path, port], [])
   end
 
   @impl true
-  def handle_call() do
+  def init([file_path, port]) do
+    with {:ok, listen_socket} <-
+           :gen_tcp.listen(port, [:binary, {:packet, 0}, {:active, true}, {:ip, "127.0.0.1"}]),
+         {:ok, socket} <- :gen_tcp.accept(listen_socket),
+         do: {:ok, %{file_path: file_path, port: port, socket: socket, db: %{}}}
   end
 
   @impl true
-  def hangle_cast() do
+  def handle_call(%Command{method: :get, key: key, val: _val}, _from, state) do
+    {:reply, Kvstore.get(key, state[:db], state[:file_path]), state}
   end
 
-  def accept(port) do
-    {:ok, socket} = :gen_tcp.listen(port, [:binary, packet: :line, active: false])
-    Logger.info("accepting connecting from port #{port}")
-    loop_acceptor(socket)
+  @impl true
+  def handle_call(%Command{method: :set, key: key, val: val}, _from, state) do
+    db = Kvstore.set(key, val, state[:db], state[:file_path])
+    {:reply, :ok, Kernel.put_in(state[:db], db)}
   end
 
-  defp loop_acceptor(socket) do
-    {:ok, client} = :gen_tcp.accept(socket)
-    serve(client)
-    loop_acceptor(socket)
+  @impl true
+  def handle_call(%Command{method: :rm, key: key, val: _val}, _from, state) do
+    db = Kvstore.remove(key, state["db"], state["file_path"])
+    {:reply, :ok, Kernel.put_in(state[:db], db)}
   end
 
-  defp serve(socket) do
-    socket |> read_line() |> write_line(socket)
-    serve(socket)
-  end
-
-  defp read_line(socket) do
-    {:ok, data} = :gen_tcp.recv(socket, 0)
-    data
-  end
-
-  defp write_line(line, socket) do
-    :gen_tcp.send(socket, line)
+  @impl true
+  def handle_cast(:compact, state) do
+    {:noreply, state}
   end
 end

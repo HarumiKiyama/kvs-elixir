@@ -1,16 +1,16 @@
 defmodule Kvsclient do
   def get(key, addr) do
-    with :ok = send_to_server(struct(Command, method: :get, key: key), addr),
+    with :ok <- send_to_server(struct(Command, method: :get, key: key), addr),
       do: :ok
   end
 
   def set(key, val, addr) do
-    with :ok = send_to_server(struct(Command, method: :set, key: key, val: val), addr),
+    with :ok <- send_to_server(struct(Command, method: :set, key: key, val: val), addr),
       do: :ok
   end
 
   def rm(key, addr) do
-    with :ok = send_to_server(struct(Command, method: :rm, key: key), addr),
+    with :ok <- send_to_server(struct(Command, method: :rm, key: key), addr),
       do: :ok
   end
 
